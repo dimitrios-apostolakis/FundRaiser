@@ -1,4 +1,5 @@
 ﻿using FundRaiserWeb.Data;
+using FundRaiserWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FundRaiserWeb.Controllers
@@ -14,8 +15,8 @@ namespace FundRaiserWeb.Controllers
 
         public IActionResult Index()
         {   //retrieve all records, convert to a list, assign to variable
-            var objCategoryList = _db.Categories.ToList();
-            return View();
+            IEnumerable<Category> objCategoryList = _db.Categories;
+            return View(objCategoryList);
         }
     }
 }
