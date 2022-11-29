@@ -18,5 +18,11 @@ namespace FundRaiserWeb.Controllers
             IEnumerable<Category> objCategoryList = _db.Categories;
             return View(objCategoryList);
         }
+
+        //GET ACTION METHOD
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
