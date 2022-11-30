@@ -64,23 +64,58 @@ namespace FundRaiserWeb.Controllers
 			return View(categoryFromDb);
 		}
 
-		////POST ACTION METHOD
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]  //Prevent Cross Site Request Forgery Attack
-		//public IActionResult Edit(Category obj)
-		//{
-		//	if (obj.Name == obj.DisplayOrder.ToString())
-		//	{
-		//		ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name."); //CustomError
-		//	}
+		//POST ACTION METHOD
+		[HttpPost]
+		[ValidateAntiForgeryToken]  //Prevent Cross Site Request Forgery Attack
+		public IActionResult Edit(Category obj)
+		{
+			if (obj.Name == obj.DisplayOrder.ToString())
+			{
+				ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name."); //CustomError
+			}
 
-		//	if (ModelState.IsValid)
-		//	{
-		//		_db.Categories.Add(obj);
-		//		_db.SaveChanges();
-		//		return RedirectToAction("Index");
-		//	}
-		//	return View(obj);
-		//}
+			if (ModelState.IsValid)
+			{
+				_db.Categories.Update(obj);
+				_db.SaveChanges();
+				return RedirectToAction("Index");
+			}
+			return View(obj);
+		}
+
+		//GET ACTION METHOD
+		public IActionResult Delete(int? id)
+		{
+			if (id == null || id == 0)
+			{
+				return NotFound();
+			}
+			var categoryFromDb = _db.Categories.Find(id);
+			//var categoryFromDbFirst = _db.Categories.FirstOrDefault(u=>u.Id==id);
+			//var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+
+			if (categoryFromDb == null)
+			{
+				return NotFound();
+			}
+
+			return View(categoryFromDb);
+		}
+
+		//POST ACTION METHOD
+		[HttpPost,ActionName("Delete")]
+		[ValidateAntiForgeryToken]  //Prevent Cross Site Request Forgery Attack
+		public IActionResult DeletePOST(int? id)  //pass complete obj (Category obj) or only id
+        {//cannot have same signature with the name and the parameters for 2 action methods
+            var obj = _db.Categories.Find(id);//id==null
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            
+            _db.Categories.Remove(obj);
+			_db.SaveChanges();
+			return RedirectToAction("Index");
+		}
 	}
 }
