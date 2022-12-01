@@ -39,7 +39,8 @@ namespace FundRaiserWeb.Controllers
             {
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
-                return RedirectToAction("Index");
+				TempData["success"] = "Category created successfully";
+				return RedirectToAction("Index");
             }
             return View(obj);
         }
@@ -78,6 +79,7 @@ namespace FundRaiserWeb.Controllers
 			{
 				_db.Categories.Update(obj);
 				_db.SaveChanges();
+				TempData["success"] = "Category updated successfully";
 				return RedirectToAction("Index");
 			}
 			return View(obj);
@@ -107,7 +109,7 @@ namespace FundRaiserWeb.Controllers
 		[ValidateAntiForgeryToken]  //Prevent Cross Site Request Forgery Attack
 		public IActionResult DeletePOST(int? id)  //pass complete obj (Category obj) or only id
         {//cannot have same signature with the name and the parameters for 2 action methods
-            var obj = _db.Categories.Find(id);//id==null
+            var obj = _db.Categories.Find(id);//id==null all disabled, if 1 enabled=>prim. key=>autom. set on form
             if (obj == null)
             {
                 return NotFound();
@@ -115,6 +117,7 @@ namespace FundRaiserWeb.Controllers
             
             _db.Categories.Remove(obj);
 			_db.SaveChanges();
+			TempData["success"] = "Category deleted successfully";
 			return RedirectToAction("Index");
 		}
 	}
